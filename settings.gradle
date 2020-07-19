@@ -1,0 +1,3 @@
+rootProject.name='HighLightTextViewSample'
+include ':app'
+include ':highlight-textview'
