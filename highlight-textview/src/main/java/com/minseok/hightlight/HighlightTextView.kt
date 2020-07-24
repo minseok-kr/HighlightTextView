@@ -21,10 +21,15 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
     private var textHighLightColor = context.getColor(R.color.highlight_yellow)
 
-    private var highlightWidth = lineHeight.toFloat()
+    private var highlightWidth = NO_STROKE_WIDTH
 
     fun highlight(text: String) {
         targetText = text
+        requestLayout()
+    }
+
+    fun setStrokeWidth(width: Float) {
+        highlightWidth = width
         requestLayout()
     }
 
@@ -58,7 +63,7 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
                 typedArray.getString(R.styleable.HighlightTextView_highlightText) ?: targetText
 
         highlightWidth =
-                typedArray.getDimension(R.styleable.HighlightTextView_highlightWidth, highlightWidth)
+                typedArray.getDimension(R.styleable.HighlightTextView_highlightWidth, NO_STROKE_WIDTH)
 
         typedArray.recycle()
     }
@@ -76,6 +81,10 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         val startIndex = text.indexOf(target)
         paint.getTextBounds(text.toString(), startIndex, startIndex + target.length, bounds)
 
+        if (highlightWidth == NO_STROKE_WIDTH) {
+            highlightWidth = bounds.height().toFloat()
+        }
+
         val preWord = text.substring(0, startIndex)
         val preWidth = measureTextWidth(preWord).toInt()
         val targetWidth = measureTextWidth(target)
@@ -84,11 +93,13 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         //  val positionOfLine = measureLineOfText(startIndex)
         val positionOfLine = 1
 
+        val heightUntilUnderline = positionOfLine * lineHeight
+
         return RectF(
                 preWidth.toFloat(),
-                (highlightWidth * (positionOfLine - 1)),
+                heightUntilUnderline - (highlightWidth * (positionOfLine - 1)),
                 preWidth + targetWidth,
-                (highlightWidth * positionOfLine)
+                heightUntilUnderline - (highlightWidth * positionOfLine)
         )
     }
 
@@ -122,5 +133,9 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         }
 
         super.onDraw(canvas)
+    }
+
+    companion object {
+        const val NO_STROKE_WIDTH = -1F
     }
 }

@@ -3,7 +3,9 @@ package com.minseok.highlighttextviewsample
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
 import android.widget.Button
+import android.widget.SeekBar
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import com.minseok.hightlight.HighlightTextView
@@ -21,6 +23,22 @@ class MainActivity : AppCompatActivity() {
         input.addTextChangedListener {
             sentence.highlight(it.toString())
         }
+
+        val seek = findViewById<SeekBar>(R.id.seek_width)
+        seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val widthValue = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        progress.toFloat(),
+                        resources.displayMetrics
+                )
+
+                sentence.setStrokeWidth(widthValue)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        })
 
         val btnColorBlue = findViewById<Button>(R.id.btn_blue)
         btnColorBlue.setOnClickListener {
