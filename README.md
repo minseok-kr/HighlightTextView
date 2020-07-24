@@ -2,9 +2,9 @@
  A TextView with lightweight-highlighting.
 
 ## Demo
-| Base | Color | Width |
-|:---:|:---:|:---:|
-|<img src='https://user-images.githubusercontent.com/32336889/88352043-56e5aa80-cd93-11ea-8808-dccf70a184cd.gif' width='70%'/>|<img src='https://user-images.githubusercontent.com/32336889/88351878-cad38300-cd92-11ea-85cd-2669e3bf2b7f.gif' width='70%'/>|<img src='https://user-images.githubusercontent.com/32336889/88351890-d161fa80-cd92-11ea-8873-2b6f1246f10a.gif' width='70%'/>|
+| Base | Color | Width | Radius |
+|:---:|:---:|:---:|:---:|
+|<img src='https://user-images.githubusercontent.com/32336889/88354423-d0819680-cd9b-11ea-851a-78c19b04bbc2.gif'/>|<img src='https://user-images.githubusercontent.com/32336889/88354429-d37c8700-cd9b-11ea-9ba5-c44e6755c852.gif'/>|<img src='https://user-images.githubusercontent.com/32336889/88354440-da0afe80-cd9b-11ea-8a67-43d5e8e03ad1.gif'/>|<img src='https://user-images.githubusercontent.com/32336889/88354435-d7100e00-cd9b-11ea-8384-1ca179070807.gif'/>|
 
 ## Gradle
 Progressing...
@@ -20,7 +20,8 @@ Progressing...
         android:text="Lorem ipsum dolor sit amet,"
         android:textSize="25sp"
         app:highlightText="ipsum"
-        app:highlightWidth="10dp" />
+        app:highlightWidth="8dp"
+        app:highlightRadius="4dp"/>
 ```
 
 ### Kotlin
