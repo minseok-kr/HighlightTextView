@@ -105,9 +105,9 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         val heightUntilUnderline = positionOfLine * lineHeight
 
         return RectF(
-                preWidth.toFloat(),
+                preWidth.toFloat() + paddingStart,
                 heightUntilUnderline - (highlightWidth * (positionOfLine - 1)),
-                preWidth + targetWidth,
+                preWidth + targetWidth + paddingStart,
                 heightUntilUnderline - (highlightWidth * positionOfLine)
         )
     }
