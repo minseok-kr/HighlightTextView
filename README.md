@@ -1,10 +1,10 @@
 # HighlightTextView
- A TextView with light-highlighting.
+ A TextView with lightweight-highlighting.
 
 ## Demo
-| Base | Color | 
-|:---:|:---:|
-|<img src='https://user-images.githubusercontent.com/32336889/87878304-62954200-ca1e-11ea-8f26-65ce1393b34a.gif' width='70%'/>|<img src='https://user-images.githubusercontent.com/32336889/87878366-b7d15380-ca1e-11ea-8140-86fe7d2da744.gif' width='70%'/>|
+| Base | Color | Width |
+|:---:|:---:|:---:|
+|<img src='https://user-images.githubusercontent.com/32336889/88352043-56e5aa80-cd93-11ea-8808-dccf70a184cd.gif' width='70%'/>|<img src='https://user-images.githubusercontent.com/32336889/88351878-cad38300-cd92-11ea-85cd-2669e3bf2b7f.gif' width='70%'/>|<img src='https://user-images.githubusercontent.com/32336889/88351890-d161fa80-cd92-11ea-8873-2b6f1246f10a.gif' width='70%'/>|
 
 ## Gradle
 Progressing...
@@ -19,7 +19,8 @@ Progressing...
         android:layout_margin="@dimen/default_margin"
         android:text="Lorem ipsum dolor sit amet,"
         android:textSize="25sp"
-        app:highlightText="ipsum" />
+        app:highlightText="ipsum"
+        app:highlightWidth="10dp" />
 ```
 
 ### Kotlin
