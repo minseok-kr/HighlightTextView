@@ -4,5 +4,6 @@
         <attr name="highlightColor" format="color|reference"/>
         <attr name="highlightText" format="string"/>
         <attr name="highlightWidth" format="dimension"/>
+        <attr name="highlightRadius" format="dimension"/>
     </declare-styleable>
 </resources>

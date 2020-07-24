@@ -6,7 +6,9 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.TypedValue
 import androidx.annotation.ColorRes
+import java.lang.reflect.TypeVariable
 
 
 class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = android.R.attr.textViewStyle) : androidx.appcompat.widget.AppCompatTextView(context, attributeSet, defStyleAttr) {
@@ -22,6 +24,8 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
     private var textHighLightColor = context.getColor(R.color.highlight_yellow)
 
     private var highlightWidth = NO_STROKE_WIDTH
+
+    private var highlightRadius = 0F
 
     fun highlight(text: String) {
         targetText = text
@@ -40,8 +44,10 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         invalidate()
     }
 
-    // TODO: support radius of corners.
-//    fun setRadius(radius: Int) = Unit
+    fun setRadius(dp: Float) {
+        highlightRadius = dp
+        invalidate()
+    }
 
     init {
         setupAttributes(context, attributeSet, defStyleAttr)
@@ -64,6 +70,9 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
         highlightWidth =
                 typedArray.getDimension(R.styleable.HighlightTextView_highlightWidth, NO_STROKE_WIDTH)
+
+        highlightRadius =
+                typedArray.getDimension(R.styleable.HighlightTextView_highlightRadius, highlightRadius)
 
         typedArray.recycle()
     }
@@ -129,7 +138,7 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
     override fun onDraw(canvas: Canvas?) {
         if (isHighlighting) {
-            canvas?.drawRect(mRectF, mPaint)
+            canvas?.drawRoundRect(mRectF, highlightRadius, highlightRadius, mPaint)
         }
 
         super.onDraw(canvas)

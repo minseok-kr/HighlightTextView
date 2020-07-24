@@ -55,6 +55,24 @@
         app:layout_constraintTop_toBottomOf="@id/title_width"/>
 
     <TextView
+        android:id="@+id/title_radius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stroke radius"
+        android:textColor="@color/black"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginLeft="@dimen/default_margin"
+        app:layout_constraintTop_toBottomOf="@id/seek_width"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <SeekBar
+        android:id="@+id/seek_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        app:layout_constraintTop_toBottomOf="@id/title_radius"/>
+
+    <TextView
         android:id="@+id/title_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +80,7 @@
         android:textColor="@color/black"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginLeft="@dimen/default_margin"
-        app:layout_constraintTop_toBottomOf="@id/seek_width"
+        app:layout_constraintTop_toBottomOf="@id/seek_radius"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <Button

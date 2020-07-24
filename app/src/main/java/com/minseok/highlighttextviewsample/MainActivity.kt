@@ -24,21 +24,15 @@ class MainActivity : AppCompatActivity() {
             sentence.highlight(it.toString())
         }
 
-        val seek = findViewById<SeekBar>(R.id.seek_width)
-        seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val widthValue = TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        progress.toFloat(),
-                        resources.displayMetrics
-                )
+        val seekWidth = findViewById<SeekBar>(R.id.seek_width)
+        seekWidth.setOnSeekBarChangeListener(SeekChangeListener(
+                onProgressChanged = { _, progress, _ -> sentence.setStrokeWidth(progress.dpToPx()) }
+        ))
 
-                sentence.setStrokeWidth(widthValue)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-        })
+        val seekRadius = findViewById<SeekBar>(R.id.seek_radius)
+        seekRadius.setOnSeekBarChangeListener(SeekChangeListener(
+                onProgressChanged = { _, progress, _ -> sentence.setRadius(progress.dpToPx()) }
+        ))
 
         val btnColorBlue = findViewById<Button>(R.id.btn_blue)
         btnColorBlue.setOnClickListener {
@@ -55,4 +49,28 @@ class MainActivity : AppCompatActivity() {
             sentence.setColor(R.color.yellow)
         }
     }
+
+    class SeekChangeListener(
+            private var onProgressChanged: ((SeekBar?, Int, Boolean) -> Unit)? = null,
+            private var onStartTrackingTouch: ((SeekBar?) -> Unit)? = null,
+            private var onStopTrackingTouch: ((SeekBar?) -> Unit)? = null
+    ) : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            onProgressChanged?.invoke(seekBar, progress, fromUser)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            onStartTrackingTouch?.invoke(seekBar)
+        }
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            onStopTrackingTouch?.invoke(seekBar)
+        }
+    }
+
+    private fun Int.dpToPx(): Float = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            resources.displayMetrics
+    )
 }
