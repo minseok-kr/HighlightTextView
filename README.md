@@ -42,6 +42,6 @@ input.addTextChangedListener {
 
 
 ## Soon
-* Support rounded corners of highlight
+* ~Support rounded corners of highlight~
 * Support a highlight of multiline
 * Support a highlight of mulitword
