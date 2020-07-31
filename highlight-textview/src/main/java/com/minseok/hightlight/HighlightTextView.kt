@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.AttributeSet
 import androidx.annotation.ColorRes
@@ -19,13 +20,33 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
     private var targetText: List<String> = emptyList()
 
-    private var textHighLightColor = context.getColor(R.color.highlight_yellow)
+    private var highLightColor = context.getColor(R.color.highlight_yellow)
 
     private var highlightWidth = NO_STROKE_WIDTH
 
     private var highlightRadius = 0F
 
     private var highlightBoldFlag = false
+
+    private var highlightTextColor = currentTextColor
+
+    private val isChangeSelectedTextColor: Boolean
+        get() = highlightTextColor != currentTextColor
+
+    private val highlightTextStyles: List<Any>
+        get() = mutableListOf<Any>().apply {
+            if (highlightBoldFlag) {
+                add(StyleSpan(Typeface.BOLD))
+            }
+
+            if (isChangeSelectedTextColor) {
+                add(ForegroundColorSpan(highlightTextColor))
+            }
+        }
+
+    private val stringBuilder: SpannableStringBuilder by lazy {
+        SpannableStringBuilder(text.toString())
+    }
 
     fun highlight(text: String) {
         highlight(listOf(text))
@@ -47,9 +68,9 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
     }
 
     fun setColor(@ColorRes color: Int) {
-        textHighLightColor = context.getColor(color)
+        highLightColor = context.getColor(color)
 
-        mPaint.color = textHighLightColor
+        mPaint.color = highLightColor
         invalidate()
     }
 
@@ -63,7 +84,7 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
         with(mPaint) {
             this.style = Paint.Style.FILL
-            this.color = textHighLightColor
+            this.color = highLightColor
         }
     }
 
@@ -71,8 +92,8 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         val typedArray =
                 context.obtainStyledAttributes(attrs, R.styleable.HighlightTextView, defStyleAttr, 0)
 
-        textHighLightColor =
-                typedArray.getInt(R.styleable.HighlightTextView_highlightColor, textHighLightColor)
+        highLightColor =
+                typedArray.getInt(R.styleable.HighlightTextView_highlightColor, highLightColor)
 
         val inputTargets =
                 typedArray.getString(R.styleable.HighlightTextView_highlightText)
@@ -88,20 +109,47 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         highlightBoldFlag =
                 typedArray.getBoolean(R.styleable.HighlightTextView_highlightBold, highlightBoldFlag)
 
+        highlightTextColor =
+                typedArray.getInt(R.styleable.HighlightTextView_highlightTextColor, highlightTextColor)
+
         typedArray.recycle()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (isHighlighting) {
             mRectF = targetText.mapNotNull(::measureTargetTextRect)
-            text = if (highlightBoldFlag) {
-                setStyledText(targetText)
-            } else {
-                text
+        }
+
+        text = when {
+            highlightTextStyles.isNotEmpty() -> {
+                getSortedTargetTexts(targetText).forEach {
+                    val start = it.first
+                    val end = it.first + it.second
+
+                    stringBuilder.setSpan(
+                            highlightTextStyles,
+                            start,
+                            end
+                    )
+                }
+
+                stringBuilder
             }
+            else -> text.toString()
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
+    private fun SpannableStringBuilder.setSpan(styles: List<Any>, position: Int, length: Int) {
+        styles.forEach { style ->
+            setSpan(
+                    style,
+                    position,
+                    length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
     }
 
     private fun measureTargetTextRect(target: String): RectF? {
@@ -159,19 +207,6 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
         // Not found.
         return 0
-    }
-
-    private fun setStyledText(targets: List<String>): SpannableStringBuilder {
-        val highlights = getSortedTargetTexts(targets)
-
-        return SpannableStringBuilder(text.toString()).apply {
-            highlights.forEach {
-                val position = it.first
-                val length = it.second
-
-                setSpan(StyleSpan(Typeface.BOLD), position, position + length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
-        }
     }
 
     private fun getSortedTargetTexts(targets: List<String>) = targets
