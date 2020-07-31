@@ -19,7 +19,7 @@ Progressing...
         android:layout_margin="@dimen/default_margin"
         android:text="Lorem ipsum dolor sit amet,"
         android:textSize="25sp"
-        app:highlightText="ipsum"
+        app:highlightText="ipsum,dolor"
         app:highlightWidth="8dp"
         app:highlightRadius="4dp"/>
 ```

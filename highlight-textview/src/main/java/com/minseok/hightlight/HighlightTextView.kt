@@ -6,20 +6,18 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.TypedValue
 import androidx.annotation.ColorRes
-import java.lang.reflect.TypeVariable
 
 
 class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = android.R.attr.textViewStyle) : androidx.appcompat.widget.AppCompatTextView(context, attributeSet, defStyleAttr) {
     private val isHighlighting
-        get() = targetText.isNotBlank() && text.contains(targetText)
+        get() = targetText.isNotEmpty() && targetText.any { text.contains(it) }
 
     private val mPaint = Paint()
 
-    private var mRectF = RectF()
+    private var mRectF: List<RectF> = emptyList()
 
-    private var targetText = ""
+    private var targetText: List<String> = emptyList()
 
     private var textHighLightColor = context.getColor(R.color.highlight_yellow)
 
@@ -28,7 +26,12 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
     private var highlightRadius = 0F
 
     fun highlight(text: String) {
-        targetText = text
+        targetText = listOf(text)
+        requestLayout()
+    }
+
+    fun highlight(texts: List<String>) {
+        targetText = texts
         requestLayout()
     }
 
@@ -65,8 +68,10 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         textHighLightColor =
                 typedArray.getInt(R.styleable.HighlightTextView_highlightColor, textHighLightColor)
 
-        targetText =
-                typedArray.getString(R.styleable.HighlightTextView_highlightText) ?: targetText
+        val inputTargets =
+                typedArray.getString(R.styleable.HighlightTextView_highlightText)
+
+        targetText = inputTargets?.split(",") ?: emptyList()
 
         highlightWidth =
                 typedArray.getDimension(R.styleable.HighlightTextView_highlightWidth, NO_STROKE_WIDTH)
@@ -79,7 +84,7 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (isHighlighting) {
-            mRectF = measureTargetTextRect(targetText)
+            mRectF = targetText.map(::measureTargetTextRect)
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -103,6 +108,8 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
         val positionOfLine = 1
 
         val heightUntilUnderline = positionOfLine * lineHeight
+
+        // TODO: check gravity
 
         return RectF(
                 preWidth.toFloat() + paddingStart,
@@ -138,7 +145,9 @@ class HighlightTextView @JvmOverloads constructor(context: Context, attributeSet
 
     override fun onDraw(canvas: Canvas?) {
         if (isHighlighting) {
-            canvas?.drawRoundRect(mRectF, highlightRadius, highlightRadius, mPaint)
+            mRectF.forEach {
+                canvas?.drawRoundRect(it, highlightRadius, highlightRadius, mPaint)
+            }
         }
 
         super.onDraw(canvas)
