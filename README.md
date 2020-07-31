@@ -20,6 +20,7 @@ Progressing...
         android:text="Lorem ipsum dolor sit amet,"
         android:textSize="25sp"
         app:highlightText="ipsum,dolor"
+        app:highlightBold="true"
         app:highlightWidth="8dp"
         app:highlightRadius="4dp"/>
 ```
