@@ -9,7 +9,19 @@
 |<img src='https://user-images.githubusercontent.com/32336889/88354423-d0819680-cd9b-11ea-851a-78c19b04bbc2.gif'/>|<img src='https://user-images.githubusercontent.com/32336889/88354429-d37c8700-cd9b-11ea-9ba5-c44e6755c852.gif'/>|<img src='https://user-images.githubusercontent.com/32336889/88354440-da0afe80-cd9b-11ea-8a67-43d5e8e03ad1.gif'/>|<img src='https://user-images.githubusercontent.com/32336889/88354435-d7100e00-cd9b-11ea-8384-1ca179070807.gif'/>|
 
 ## Gradle
-Progressing...
+Step 1. Add it in your root build.gradle at the end of repositories:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}Copy
+Step 2. Add the dependency
+
+	dependencies {
+	        implementation 'com.github.minseok-kr:HighlightTextView:1.2.0'
+	}
 
 ## Usage
 ### Xml
