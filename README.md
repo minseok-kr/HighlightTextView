@@ -1,5 +1,7 @@
 # HighlightTextView
  A TextView with lightweight-highlighting.
+ 
+ [![](https://jitpack.io/v/minseok-kr/HighlightTextView.svg)](https://jitpack.io/#minseok-kr/HighlightTextView)
 
 ## Demo
 | Base | Color | Width | Radius |
